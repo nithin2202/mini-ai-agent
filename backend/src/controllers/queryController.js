@@ -1,13 +1,8 @@
 const queryService =
 require("../services/queryServices");
 
-const handleQuery = async (
-    req,
-    res
-) => {
-
+const handleQuery = async (req,res) => {
     try {
-
         const { query } = req.body;
 
         if (!query) {
@@ -19,9 +14,7 @@ const handleQuery = async (
             });
         }
 
-        const result =
-            await queryService
-                .processQuery(query);
+        const result = await queryService.processQuery(query);
 
         return res.status(200).json({
             success: true,
@@ -37,6 +30,4 @@ const handleQuery = async (
     }
 };
 
-module.exports = {
-    handleQuery
-};
+module.exports = { handleQuery};

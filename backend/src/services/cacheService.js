@@ -1,24 +1,14 @@
-const embeddingService =
-require("./embeddingService");
-
-const semanticCacheModel =
-require("../models/semanticCacheModel");
-
-const cosineSimilarity =
-require("../utils/cosineSimiliarity");
+const embeddingService =require("./embeddingService");
+const semanticCacheModel =require("../models/semanticCacheModel");
+const cosineSimilarity =require("../utils/cosineSimiliarity");
 
 const THRESHOLD = 0.85;
 
-const findSimilarResponse =
-async (query) => {
+const findSimilarResponse =async (query) => {
 
-    const queryEmbedding =
-        await embeddingService
-            .generateEmbedding(query);
+    const queryEmbedding = await embeddingService.generateEmbedding(query);
 
-    const cacheEntries =
-        await semanticCacheModel
-            .getAllCache();
+    const cacheEntries =await semanticCacheModel .getAllCache();
 
     let bestMatch = null;
 
@@ -26,33 +16,19 @@ async (query) => {
 
     for (const entry of cacheEntries) {
 
-        const storedEmbedding =
-            JSON.parse(
-                entry.embedding
-            );
+        const storedEmbedding = JSON.parse(entry.embedding);
 
-        const similarity =
-            cosineSimilarity(
-                queryEmbedding,
-                storedEmbedding
-            );
+        const similarity = cosineSimilarity(queryEmbedding,storedEmbedding);
 
-        if (
-            similarity >
-            highestScore
-        ) {
+        if ( similarity >highestScore ) {
 
-            highestScore =
-                similarity;
+            highestScore =similarity;
 
-            bestMatch =
-                entry;
+            bestMatch =  entry;
         }
     }
 
-    if (
-        highestScore >= THRESHOLD
-    ) {
+    if (highestScore >= THRESHOLD) {
 
         return {
             hit: true,
@@ -61,11 +37,7 @@ async (query) => {
         };
     }
 
-    return {
-        hit: false
-    };
+    return { hit: false };
 };
 
-module.exports = {
-    findSimilarResponse
-};
+module.exports = { findSimilarResponse};

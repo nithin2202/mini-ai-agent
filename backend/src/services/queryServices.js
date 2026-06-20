@@ -1,37 +1,27 @@
-const routerService =
-require("./routerServices");
+const routerService =require("./routerServices");
 
-const faqService =
-require("./faqService");
+const faqService =require("./faqService");
 
-const llmService =
-require("./llmService");
+const llmService =require("./llmService");
 
-const cacheService =
-require("./cacheService");
+const cacheService =require("./cacheService");
 
-const embeddingService =
-require("./embeddingService");
+const embeddingService =require("./embeddingService");
 
-const queryLogModel =
-require("../models/queryLogModels");
+const queryLogModel =require("../models/queryLogModels");
 
-const semanticCacheModel =
-require("../models/semanticCacheModel");
+const semanticCacheModel =require("../models/semanticCacheModel");
 
 const processQuery = async (query) => {
 
     const startTime = Date.now();
 
     // 1. Check Semantic Cache
-    const cacheResult =
-        await cacheService
-            .findSimilarResponse(query);
+    const cacheResult =await cacheService.findSimilarResponse(query);
 
     if (cacheResult.hit) {
 
-        const responseTime =
-            Date.now() - startTime;
+        const responseTime =Date.now() - startTime;
 
         await queryLogModel.createLog({
             query_text: query,
@@ -52,43 +42,29 @@ const processQuery = async (query) => {
     }
 
     // 2. Determine Route
-    const route =
-        await routerService
-            .determineRoute(query);
+    const route = await routerService.determineRoute(query);
 
     let answer;
 
     // 3. RULE Based Response
     if (route === "RULE") {
 
-        answer =
-            await faqService
-                .getAnswer(query);
+        answer =await faqService.getAnswer(query);
     }
 
     // 4. LLM Response
     else {
 
-        answer =
-            await llmService
-                .generateResponse(query);
+        answer =await llmService.generateResponse(query);
 
         // Generate Embedding
-        const embedding =
-            await embeddingService
-                .generateEmbedding(query);
+        const embedding =await embeddingService.generateEmbedding(query);
 
         // Save Semantic Cache
-        await semanticCacheModel
-            .saveCache(
-                query,
-                embedding,
-                answer
-            );
+        await semanticCacheModel.saveCache(query,embedding,answer);
     }
 
-    const responseTime =
-        Date.now() - startTime;
+    const responseTime =Date.now() - startTime;
 
     // 5. Log Query
     await queryLogModel.createLog({

@@ -8,11 +8,7 @@ const getAnswer = async (query) => {
 
     for (const faq of faqs) {
 
-        if (
-            lowerQuery.includes(
-                faq.keyword.toLowerCase()
-            )
-        ) {
+        if (lowerQuery.includes(faq.keyword.toLowerCase())) {
             return faq.answer;
         }
     }

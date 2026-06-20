@@ -4,6 +4,4 @@ const getAllFaqs = async () => {
     return await db("faqs").select("*");
 };
 
-module.exports = {
-    getAllFaqs
-};
+module.exports = {getAllFaqs};

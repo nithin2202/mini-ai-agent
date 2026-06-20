@@ -1,10 +1,6 @@
 const db = require("../../config/mysqlDb");
 
-const saveCache = async (
-    query,
-    embedding,
-    response
-) => {
+const saveCache = async (query,embedding,response) => {
 
     await db("semantic_cache")
         .insert({

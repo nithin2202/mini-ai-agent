@@ -3,8 +3,7 @@ require("../models/queryLogModels");
 
 const getStats = async () => {
 
-    return await queryLogModel
-        .getStats();
+    return await queryLogModel.getStats();
 };
 
 module.exports = {
