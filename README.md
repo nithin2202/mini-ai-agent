@@ -133,7 +133,7 @@ json
 
 ### Statistics
 
-GET `/api/stats`
+GET `rest2/api/stats`
 
 Response:
 
